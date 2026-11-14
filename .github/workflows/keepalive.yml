@@ -30,7 +30,7 @@ jobs:
           AK_SECRET: ${{ secrets.AK_SECRET }}
           INSTANCE_ID: ${{ secrets.INSTANCE_ID }}
           REGION_ID: cn-hongkong
-          TRAFFIC_THRESHOLD_GB: '120'
+          TRAFFIC_THRESHOLD_GB: '160'
           STOPPED_MODE: StopCharging
           AUTO_START: '1'
         run: python keepalive.py
