@@ -1,0 +1,36 @@
+name: vps-keepalive
+
+on:
+  schedule:
+    # GitHub 最短 5 分钟；实际可能延迟几分钟，够用
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: vps-keepalive
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 检查并启停 ECS
+        env:
+          AK_ID: ${{ secrets.AK_ID }}
+          AK_SECRET: ${{ secrets.AK_SECRET }}
+          INSTANCE_ID: ${{ secrets.INSTANCE_ID }}
+          REGION_ID: cn-hongkong
+          TRAFFIC_THRESHOLD_GB: '120'
+          STOPPED_MODE: StopCharging
+          AUTO_START: '1'
+        run: python keepalive.py
